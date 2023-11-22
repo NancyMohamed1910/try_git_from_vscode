@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_shared_preference/services/shared_preference.services.dart';
 
-void main() {
+void main() async {
+  await PreferenceServices.init();
+  ////note: we can't write PrefernceService.prefs=SharedPrefernce.getInstance()
   runApp(const MyApp());
 }
 
@@ -49,16 +52,23 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(widget.title),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[Text('hi Ahmed')],
+        appBar: AppBar(
+          backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+          title: Text(widget.title),
         ),
-      ),
-    );
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              const Text('hi Sharded Preference'),
+              ElevatedButton(
+                  onPressed: () {
+                    PreferenceServices.prefs?.setString("userName", "Nancy");
+                  },
+                  child: Text(
+                      '${PreferenceServices.prefs?.getString("userName") ?? 'no name'}'))
+            ],
+          ),
+        ));
   }
 }
